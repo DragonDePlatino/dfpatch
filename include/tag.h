@@ -1,12 +1,11 @@
 #pragma once
 
 /** A list of patch or variable tags. */
-typedef struct TAG TAG;
-struct TAG {
+typedef struct tag {
 	char *name;
-	TAG *mod;
+	struct tag *mod;
 	int data;
-};
+} TAG;
 
 typedef struct {
 	TAG *data;
