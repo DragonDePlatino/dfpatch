@@ -132,7 +132,9 @@ void patch_write_raw(char *path, TAGLIST *patch) {
 	char *text = file_read(path);
 	char *wstart = text, *c = text;
 	TAG *tag, *subtag, *entity = NULL;
-	
+
+	int applied = 0;
+
 	/* Open output file for writing. */
 	file = fopen(path, "w");
 
@@ -147,11 +149,15 @@ void patch_write_raw(char *path, TAGLIST *patch) {
 				fwrite(wstart, 1, c - wstart + 1, file);
 				wstart = ++c;
 
+				applied ++;
+
 				/* Append new tags. */
 				subtag = entity->mod;
 				while (subtag) {
 					fprintf(file, "\n\t[%s]", subtag->name);
 					subtag = subtag->mod;
+
+					applied ++;
 				}
 			}
 			entity = tag;
@@ -163,6 +169,7 @@ void patch_write_raw(char *path, TAGLIST *patch) {
 			}
 
 			if (tag->mod) {
+				/* printf("\tPatch in %s: %.*s[%s]\n", path, (int)(c - wstart - 1), wstart, tag->mod->name); */
 				/* Write file so far and tag. */
 				fprintf(file, "%.*s[%s]", (int)(c - wstart - 1), wstart, tag->mod->name);
 				wstart = end + 1;
@@ -172,6 +179,8 @@ void patch_write_raw(char *path, TAGLIST *patch) {
 				free(tag->mod->name);
 				free(tag->mod);
 				tag->mod = subtag;
+
+				applied ++;
 			}
 		}
 		*end = ']';
@@ -188,25 +197,33 @@ void patch_write_raw(char *path, TAGLIST *patch) {
 
 	fclose(file);
 	free(text);
+
+	printf("Applied %d patches.\n", applied);
 }
 
 void patch_write_init(char *path, TAGLIST *patch) {
 	FILE *file;
 	char *text = file_read(path);
 	char *wstart = text, *c = text;
-	
+
+	int applied = 0;
+
 	/* Open output file for writing. */
 	file = fopen(path, "w");
 	while ((c = strchr(c, '['))) {
 		TAG *tag;
 		if ((tag = bsearch(++c, patch->data, patch->size, sizeof(TAG), rawcmp))) {
+			/* printf("\tPatch in %s: %.*s[%s]\n", path, (int)(c - 1 - wstart), wstart, tag->name); */
 			/* Write file so far and tag. */
 			fprintf(file, "%.*s[%s]", (int)(c - 1 - wstart), wstart, tag->name);
 			wstart = strchr(c, ']') + 1;
+			applied ++;
 		}
 	}
 
 	fwrite(wstart, 1, strlen(wstart), file);
 	fclose(file);
 	free(text);
+
+	printf("Applied %d patches.\n", applied);
 }

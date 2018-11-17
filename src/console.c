@@ -16,7 +16,7 @@ char console_yn(char* query) {
 			case 'n':
 				return in;
 			default:
-				printf("Invalid response. ");
+				puts("Invalid response. ");
 				break;
 		}
 	}
@@ -24,7 +24,7 @@ char console_yn(char* query) {
 }
 
 void console_continue(char *text) {
-	printf(text);
+	puts(text);
 	while ((getchar()) != '\n');
 }
 
@@ -34,7 +34,7 @@ void console_quit(char *format, ...) {
 	vprintf(format, args);
 	va_end(args);
 
-	printf("\nPress enter to quit...");
+	puts("\nPress enter to quit...");
 	while ((getchar()) != '\n');
 	exit(0);
 }

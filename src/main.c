@@ -24,7 +24,7 @@ void patch_file(char *path, char *newpath, TAGLIST* deflist, patch_cb patchfunc)
 		printf("Could not find %s\n", newpath);
 	} else {
 		TAGLIST *rawlist = patch_read_raw(path, deflist);
-		printf("Patching %s...\n", strchr(path, '/') + 1);
+		printf("Patching %s... ", strchr(path, '/') + 1);
 		patchfunc(newpath, rawlist);
 		taglist_free(rawlist);
 	}
@@ -86,9 +86,9 @@ int main(void) {
 
 		patch_files("objects_patch/", "../raw/objects/", "defines.txt", patch_write_raw);
 		patch_files("init_patch/", "../data/init/", "", patch_write_init);
-		printf("\nInstallation complete. ");
+		puts("\nInstallation complete. ");
 	} else {
-		printf("\nInstallation cancelled. ");
+		puts("\nInstallation cancelled. ");
 	}
 
 	console_quit("");

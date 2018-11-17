@@ -55,3 +55,9 @@ dkms.conf
 Thumbs.db
 ehthumbs.db
 ehthumbs_vista.db
+
+# CLion/IntelliJ folder
+.idea/
+
+# Linux executable
+/dfpatch
