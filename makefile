@@ -5,7 +5,7 @@ $$(prefix)%.o: $1/%.c $$(prefix)%.d
 endef
 
 DEPFLAGS = -MT $@ -MMD -MP -MF $(@:.o=.Td)
-CFLAGS = -o $@ -c $< -std=c89 -Wall -Wextra -Werror -pedantic -Wno-pointer-sign -g
+CFLAGS = -o $@ -c $< -std=c89 -Wall -Wextra -pedantic -Wno-pointer-sign -g
 DEFINES = -DMEM_DEBUG -JSMN_PARENT_LINKS
 
 INC := -Iinclude -include stdbool.h
